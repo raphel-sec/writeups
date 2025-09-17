@@ -31,6 +31,7 @@ A few directories are found.  The ones that stick out to me are **/custom** on t
 I'm unable to access the **/auth** page, so it doesn't seem likely to be an entry-point.
 
 Looking at the **/custom** directory, there's additional paths for css and js.  I want to check out the js path, maybe there will be scripts in there that show me how logins/authentication are handled.
+
 ![alt text](images/image-8.png)
 ![alt text](images/image-9.png)
 
