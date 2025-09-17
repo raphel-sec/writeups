@@ -14,6 +14,7 @@ I start with a rustscan on the target to quickly enumerate all open ports.  I us
 I see that ports 22, 80, and 8765 are open.  After running rustscan, I like to do an nmap scan on the discovered ports to learn more about them.
 `nmap -sC -sV -p 22,80,8765 <ip> -o scan.txt`
 ![alt text](images/image-3.png)
+
 It looks like port 80 and 8765 are serving http, one a home page, and one a login page.
 ![alt text](images/image-4.png)
 ![alt text](images/image-5.png)
@@ -37,6 +38,7 @@ Looking at the **/custom** directory, there's additional paths for css and js.  
 
 Unexpectedly, I find a backup file named **users.bak**.  I'm going to download it and see if there's any credentials in it.
 ![alt text](images/image-11.png)
+
 Nice! A username and password hash.  I'll use CrackStation to uncover the password.
 
 ![alt text](images/image-12.png)
@@ -106,29 +108,37 @@ Great, I got a passphrase, now I can login via SSH using Barry's SSH key.
 ![alt text](images/image-24.png)
 
 User flag acquired.
+
 ![alt text](images/image-25.png)
 
 ### Privilege Escalation
 
 Looking around the filesystem, I find another user, **joe**, that has an executable named **live_log**.
+
 ![alt text](images/image-31.png)
 
 Luckily, this executable has the SUID bit set. I wonder if I can leverage this.
 `find / -user root -perm -4000 -print 2>/dev/null`
+
 ![alt text](images/image-26.png)
 
 I'll use strings on the executable to see if I can get any information on how the program works.
 `strings live_log`
+
 ![alt text](images/image-27.png)
 
 I see that the program uses the tail binary, but doesn't use the absolute path for it. I'm going to try to create my own tail binary that spawns a root shell.
+
 ![alt text](images/image-28.png)
+
 I also edit the PATH variable so that when I run the program it uses the tail binary I created in the /tmp directory.
 
 Now when I run **live_log**, I get a root shell.
+
 ![alt text](images/image-29.png)
 
 Root flag acquired.
+
 ![alt text](images/image-30.png)
 
 ### Conclusion
